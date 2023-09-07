@@ -66,14 +66,14 @@ Item {
     property real value: 0
     property real shiftvalue: 0
 
-    property real rpm: 7500
+    property real rpm: 3000
     property real rpmlimit: 8000 //Originally was 7k, switched to 8000 -t
     property real rpmdamping: 5
     //property real rpmscaling:0
     property real speed: 0
     property int speedunits: 2
 
-    property real watertemp: 50
+    property real watertemp: 85
     property real waterhigh: 0
     property real waterlow: 80
     property real waterunits: 1
@@ -653,7 +653,7 @@ Item {
             height: 2
             z: 4
             color: root.engine_warmup_color
-            //visible: root.watertemp < 80
+            visible: root.watertemp < 80
         }
 
         //RPM Numbers

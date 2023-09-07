@@ -2,12 +2,10 @@
 import QtQuick 2.3
 
 //import Qt3D 1.0
-
 //import QtGraphicalEffects 1.0
+
+//import QtGraphicalEffects 1.12
 //import FileIO 1.0
-//Window {
-//   width: 800
-//  height: 480
 Item {
 
 
@@ -68,7 +66,7 @@ Item {
     property real value: 0
     property real shiftvalue: 0
 
-    property real rpm: 800
+    property real rpm: 7500
     property real rpmlimit: 8000 //Originally was 7k, switched to 8000 -t
     property real rpmdamping: 5
     //property real rpmscaling:0
@@ -77,7 +75,7 @@ Item {
 
     property real watertemp: 50
     property real waterhigh: 0
-    property real waterlow: 0
+    property real waterlow: 80
     property real waterunits: 1
 
     property real fuel: 50
@@ -144,57 +142,91 @@ Item {
     property real rpm_needle_damping: 0.2 //if(rpm<1000).15; else 0.2
 
     property bool changing_page: rpmtest.changing_pagedata
+    //Commenting out this for possible future usage rather than deleting. -Tristan
     onChanging_pageChanged: if (changing_page) {
-                                temp_slider_colour_overlay.visible = false
-                                gauge_back4.visible = false
-                                oilp_slider_colour_overlay.visible = false
-                                gauge_back3.visible = false
-                                fuel_slider_colour_overlay.visible = false
-                                gauge_back.visible = false
-                                oilt_slider_colour_overlay.visible = false
-                                gauge_back2.visible = false
-                            }
 
+                                //                                temp_slider_colour_overlay.visible = false
+                                //                                gauge_back4.visible = false
+                                //                                oilp_slider_colour_overlay.visible = false
+                                //                                gauge_back3.visible = false
+                                //                                fuel_slider_colour_overlay.visible = false
+                                //                                gauge_back.visible = false
+                                //                                oilt_slider_colour_overlay.visible = false
+                                //                                gauge_back2.visible = false
+                            }
+    //See Above reason for commenting out
     Component.onCompleted: delay_on_timer.start()
     Timer {
         id: delay_on_timer //this delay on timer is to delay the visibility of certain items , this gives a nice effect and stops opacity fade in of the screen looking crap
         interval: 500
         onTriggered: {
-            temp_slider_colour_overlay.visible = true
-            gauge_back4.visible = true
-            oilp_slider_colour_overlay.visible = true
-            gauge_back3.visible = true
-            fuel_slider_colour_overlay.visible = true
-            gauge_back.visible = true
-            oilt_slider_colour_overlay.visible = true
-            gauge_back2.visible = true
+
+            //            temp_slider_colour_overlay.visible = true
+            //            gauge_back4.visible = true
+            //            oilp_slider_colour_overlay.visible = true
+            //            gauge_back3.visible = true
+            //            fuel_slider_colour_overlay.visible = true
+            //            gauge_back.visible = true
+            //            oilt_slider_colour_overlay.visible = true
+            //            gauge_back2.visible = true
         }
     }
 
     //Tristan Generated Code Here:
     property string white_color: "#FFFFFF"
-    property string primary_color: "#FFFFFF" //#FFBF00 is amber
-    property string sweetspot_color: "#FFA500" //#00F500 for amber main screens IMO
-    property string warning_red: "#FF0000"
+    property string primary_color: "#FFFFFF" //#FFBF00 for amber
+    property string sweetspot_color: "#FFA500" //Cam Changeover Rev colpr
+    property string warning_red: "#FF0000" //Redline/Warning colors
     property string engine_warmup_color: "#eb7500"
+    property string background_color: "#000000"
     x: 0
     y: 0
 
+    //Fonts
     FontLoader {
         id: helvetica_black_oblique
         source: "./HelveticaBlackOB.ttf"
     }
 
+    //Color Change Setup for warming up.
+    property string engine_warming_dynamics: if (root.watertemp < root.waterlow)
+                                                 root.engine_warmup_color
+                                             else
+                                                 root.primary_color
+
+    /* ########################################################################## */
+    /* Main Layout items */
     /* ########################################################################## */
     Rectangle {
-        id: black_background_rect
+        id: background_rect
         y: 0
         width: 800
         height: 480
-        color: "#000000"
+        color: root.background_color
         border.width: 0
         z: 0
     }
+//    Item{
+//        id: guides
+//        Rectangle{
+//            id: centerline
+//            width: 1
+//            height: 480
+//            color: "#FFFF00"
+//            x: 400
+
+//        }
+//        Rectangle{
+//            id: gasline
+//            width: 800
+//            height: 1
+//            color: "#FFFF00"
+//            x: 0
+//            y: 427
+//        }
+
+//    }
+
     Rectangle {
         id: rev_splitter
         y: 256
@@ -212,10 +244,10 @@ Item {
         horizontalAlignment: Text.AlignRight
         font.pointSize: 32
         font.family: helvetica_black_oblique.name
-        x: 618
+        x: 608
         y: 203
         z: 2
-        width: 164
+        width: 174
         color: if (root.rpm < 8000)
                    root.primary_color
                else
@@ -246,7 +278,7 @@ Item {
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
-        x: 16
+        x: 36
         y: 396
         z: 2
         color: if (root.watertemp < 95)
@@ -262,14 +294,14 @@ Item {
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
-        x: 16
+        x: 36
         y: 338
         z: 2
         color: if (root.oiltemp < 110)
                    root.primary_color
                else
                    root.warning_red
-        text: root.oiltemp.toFixed(0) // "100°"
+        text: root.oiltemp.toFixed(0) + "°" // "100°"
     }
 
     Text {
@@ -280,7 +312,7 @@ Item {
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
-        x: 16
+        x: 36
         y: 284
         z: 2
         color: root.primary_color
@@ -316,6 +348,14 @@ Item {
         height: 2
         color: root.primary_color
     }
+    Rectangle {
+        id: oiltemp_line_vert
+        x: 270
+        y: 280
+        height: 159
+        width: 2
+        color: root.primary_color
+    }
 
     Text {
         id: odometer_display_val
@@ -329,18 +369,6 @@ Item {
         z: 2
         width: 164
         color: root.primary_color
-        //            Text {
-        //                id: odometer_capt
-        //                x: 130
-        //                y: 0
-        //                text: "MI"
-        //                font.pixelSize: 16
-        //                horizontalAlignment: Text.AlignRight
-        //                font.pointSize: 16
-        //                font.family: ra_mono.name
-        //                color: "#FFFFFF"
-        //                z: 2
-        //            }
     }
 
     Text {
@@ -359,9 +387,9 @@ Item {
     // RPM Marks
     Row {
         id: rpmLights
-        x: 43
+        x: 16
         y: 16
-        width: 700
+        width: 768
         height: 128
         layoutDirection: Qt.LeftToRight
         layer.enabled: true
@@ -377,32 +405,32 @@ Item {
                     height: 128
 
                     //Control for how the bar is lit
-                    opacity: if (Math.ceil(root.rpm / 100) > index + 1)
+                    opacity: if (Math.floor(root.rpm / 100) > index + 1)
                                  .7
-                             else if (Math.ceil(root.rpm / 100) == index + 1)
+                             else if (Math.floor(root.rpm / 100) === index + 1)
                                  1
                              else
                                  .15
 
-                    width: 3
+                    width: 3.68
 
                     //Settings for how our RPM colors are set
-                    color: if (index < 60)
+                    color: if (index < 59)
                                root.primary_color
                     //Cam Changeover
-                           else if (index >= 60 && index < 80)
+                           else if (index >= 59 && index < 79)
                                root.sweetspot_color
                     //Redline
                            else
                                root.warning_red
-                    radius: 1.5
+                    radius: 2
                 }
                 Rectangle {
                     id: rpm_marker_spacer
                     height: 128
                     opacity: 1
                     width: 4
-                    color: "#000000"
+                    color: root.background_color
                     radius: 1
                     border.width: 0
                 }
@@ -413,22 +441,22 @@ Item {
     //Actual RPM marks
     Item {
         id: rev_system
-        x: 25
+        x: 16
 
         //Tic Marks
         Rectangle {
             id: ticmark_line
-            width: 700
+            width: 763
             height: 2
-            x: 16
+            x: 0
             y: 160
             z: 1
             color: root.primary_color
         }
         Rectangle {
             id: tickmark_redline
-            x: 577
-            width: 140
+            x: 609
+            width: 153
             height: 2
             color: root.warning_red
             y: 160
@@ -437,137 +465,322 @@ Item {
 
         Row {
             id: mainTicks
-            x: 14
-            y: 160
-            width: 710
+            x: 0
+            y: 158
+            width: 765
             height: 16
             antialiasing: true
             z: 2
-            Repeater {
-                model: 11
-                property int index
+            Rectangle {
+                y: 0
+                x: 73.8
+                width: 6
+                height: 18
+                color: root.engine_warming_dynamics
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.engine_warming_dynamics
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 68
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.engine_warming_dynamics
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 144
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.engine_warming_dynamics
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 221
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.engine_warming_dynamics
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 298
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 375
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 452
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 529
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 605
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.left: parent.left
+                anchors.leftMargin: 682
+            }
+            Rectangle {
+                y: 0
+                width: 6
+                height: 18
+                color: root.primary_color
+                border.color: root.background_color
+                border.width: 2
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+            }
+
+            //            Repeater {
+            //                model: 11
+            //                property int index
+            //                Row {
+            //                    id: indie_tickrow
+            //                    width: 68
+            //                    Rectangle {
+            //                        width: 6
+            //                        height: 18
+            //                        x: 0
+            //                        y: -2
+            //                        color: if (root.watertemp < 80) {
+            //                                   if (index <= 4)
+            //                                       root.engine_warmup_color
+            //                                   else
+            //                                       root.primary_color
+            //                               } else
+            //                                   root.primary_color
+            //                        //                            color: if (index < 8)
+            //                        //                                       root.primary_color
+            //                        //                                   else
+            //                        //                                       root.warning_red
+            //                    }
+            //                }
+            //            }
+        }
                 Row {
-                    id: indie_tickrow
-                    width: 70
-                    Rectangle {
-                        width: 6
-                        height: 18
-                        x: 0
-                        y: -2
-                        color: if (root.watertemp < 80) {
-                                   if (index <= 4)
-                                       root.engine_warmup_color
-                                   else
-                                       root.primary_color
-                               } else
-                                   root.primary_color
-                        //                            color: if (index < 8)
-                        //                                       root.primary_color
-                        //                                   else
-                        //                                       root.warning_red
-                        border.color: "#000000"
-                        border.width: 2
+                    id: subTicks
+                    x: 30
+                    y: 160
+                    width: 710
+                    height: 16
+                    antialiasing: true
+                    z: 3
+                    Repeater {
+                        model: 8
+                        property int index
+                        Row {
+                            id: subTickRow
+                            width: 77
+
+                            Rectangle {
+                                width: 6
+                                height: 13
+                                x: 0
+                                y: -2
+                                border.color: root.background_color
+                                border.width: 2
+                                color: if (root.watertemp < 80) {
+                                           if (index <= 3)
+                                               root.engine_warmup_color
+                                           else
+                                               root.primary_color
+                                       } else
+                                           root.primary_color
+                                //                                   else
+                                //                                       root.warning_red
+
+                            }
+                        }
                     }
                 }
-            }
-        }
-        Row {
-            id: subTicks
-            x: 49
-            y: 160
-            width: 710
-            height: 16
-            antialiasing: true
-            z: 2
-            Repeater {
-                model: 8
-                property int index
-                Row {
-                    id: subTickRow
-                    width: 70
-                    Rectangle {
-                        width: 6
-                        height: 13
-                        x: 0
-                        y: -2
-                        color: if (root.watertemp < 80) {
-                                   if (index <= 3)
-                                       root.engine_warmup_color
-                                   else
-                                       root.primary_color
-                               } else
-                                   root.primary_color
-                        //                                   else
-                        //                                       root.warning_red
-                        border.color: "#000000"
-                        border.width: 2
-                    }
-                }
-            }
-        }
         Rectangle {
             id: engine_warmup_line
-            x: 18
+            x: 2
             y: 160
-            width: 280
+            width: 297
             height: 2
             z: 4
             color: root.engine_warmup_color
-            visible: root.watertemp < 80
+            //visible: root.watertemp < 80
         }
 
         //RPM Numbers
+        //Changed to Manual position as the alignment wasn't nice enough for my preferences
         Row {
-            id: tickNumbers
-            x: 14
+            id: numbers
+            x: 0
             y: 180
-            z: 2
-            width: 700
             height: 16
-            Repeater {
-                model: 10
-                property int index
-                Text {
-                    text: index
-                    //                        color: if (index < 8)
-                    //                                   root.primary_color
-                    //                               else
-                    //                                   root.warning_red
-                    color: if (root.watertemp < 80) {
-                               if (index <= 4)
-                                   root.engine_warmup_color
-                               else
-                                   root.primary_color
-                           } else
-                               root.primary_color
-                    font.pixelSize: 18
-                    horizontalAlignment: Text.AlignHCenter
-                    //  rightPadding: 57
-                    font.pointSize: 18
-                    font.family: helvetica_black_oblique.name
-                }
-                Rectangle {
-                    width: 57
-                    height: 17
-                    color: "#000000"
-                }
+            width: 768
+            Text {
+                id: rev_zero
+                x: 0
+                color: root.engine_warming_dynamics
+                text: "0"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
             }
-        }
-
-        Text {
-            id: numba_ten
-            x: 705
-            y: 180
-            color: root.primary_color
-            text: "10"
-            font.pixelSize: 16
-            horizontalAlignment: Text.AlignHCenter
-            font.family: helvetica_black_oblique.name
+            Text {
+                id: rev_one
+                color: root.engine_warming_dynamics
+                text: "1"
+                anchors.left: parent.left
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                anchors.leftMargin: 65
+                font.family: helvetica_black_oblique.name
+            }
+            Text {
+                id: rev_two
+                color: root.engine_warming_dynamics
+                text: "2"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 141
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_three
+                color: root.engine_warming_dynamics
+                text: "3"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 218
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_four
+                color: root.engine_warming_dynamics
+                text: "4"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 295
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_five
+                color: root.primary_color
+                text: "5"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 373
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_six
+                color: root.primary_color
+                text: "6"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 449
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_seven
+                color: root.primary_color
+                text: "7"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 526
+                anchors.left: parent.left
+            }
+            Text {
+                id: numba_eight
+                color: root.primary_color
+                text: "8"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.leftMargin: 602
+                anchors.left: parent.left
+            }
+            Text {
+                id: rev_9
+                color: root.primary_color
+                text: "9"
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                font.family: helvetica_black_oblique.name
+                anchors.rightMargin: 78
+                anchors.right: parent.right
+            }
+            Text {
+                id: rev_10
+                x: 0
+                y: 0
+                color: root.primary_color
+                text: "10"
+                anchors.right: parent.right
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                anchors.rightMargin: 0
+                transformOrigin: Item.Right
+                font.family: helvetica_black_oblique.name
+            }
         }
 
         Text {
             id: watertemp_label
-            x: 123
+            x: 113
             y: 410
             color: if (root.watertemp < 95)
                        root.primary_color
@@ -581,7 +794,7 @@ Item {
 
         Text {
             id: oiltemp_label
-            x: 123
+            x: 113
             y: 353
             color: if (root.watertemp < 110)
                        //110 is a good oil temp limit IMO
@@ -596,7 +809,7 @@ Item {
 
         Text {
             id: oilpressure_label
-            x: 123
+            x: 113
             y: 298
             color: root.primary_color
             text: "Oil Pressure"
@@ -607,8 +820,8 @@ Item {
 
         Text {
             id: fuel_label
-            x: 304
-            y: 440
+            x: 321
+            y: 431
             width: 128
             color: if (root.fuel > 30)
                        root.primary_color
@@ -632,8 +845,8 @@ Item {
         height: 32
         Row {
             id: gasgauge
-            x: -8
-            y: 0
+            x: 0
+            y: -8
             width: 128
             height: 32
             antialiasing: true
@@ -646,7 +859,7 @@ Item {
                     Rectangle {
                         width: 11
                         height: 32
-                        color: if (Math.floor(root.fuel / 10) > index) {
+                        color: if (Math.ceil(root.fuel / 10) > index) {
                                    if (root.fuel > 30)
                                        root.primary_color
                                    else
@@ -654,7 +867,7 @@ Item {
                                } else
                                    "#0A0A0A"
                         radius: 2
-                        border.width: if (Math.ceil(root.fuel / 10) >= index) {
+                        border.width: if (Math.floor(root.fuel / 10) > index) {
                                           0
                                       } else
                                           1
@@ -664,7 +877,7 @@ Item {
                     Rectangle {
                         width: 2
                         height: 32
-                        color: "#000000"
+                        color: root.background_color
                         z: 1
                     }
                 }
@@ -675,23 +888,32 @@ Item {
         id: icons
         Image {
             id: brights
-            x: 371
-            y: 293
-            height: 32
-            width: 50
+            x: 378
+            y: 296
+            height: 29
+            width: 46
             source: "./img/brights.png"
             visible: root.mainbeam
         }
+        Image{
+            x: 285
+            y: 301
+            height: 17
+            width: 49
+            source: "./img/parking_lights.png"
+            visible: root.sidelight
+        }
+
         Image {
             id: left_blinker
-            x: 338
+            x: 341
             y: 295
             source: "./img/left_blinker.png"
             visible: root.leftindicator
         }
         Image {
             id: right_blinker
-            x: 427
+            x: 432
             y: 295
             source: "./img/right_blinker.png"
             visible: root.rightindicator
@@ -738,7 +960,7 @@ Item {
         Image {
             id: oil_pressure_lamp
             x: 467
-            source: "./img/oil_light.png"
+            source: "img/oillight.png"
             y: 298
             width: 61
             height: 23
@@ -747,27 +969,48 @@ Item {
 
         Image {
             id: abs_image
-            x: 326
-            y: 347
+            x: 333
+            y: 349
             source: "./img/abs.png"
+            sourceSize.width: 42
+            sourceSize.height: 32
             visible: root.abs
         }
         Image {
-            x: 384
+            id: seatbelt_warning_lamp
+            x: 390
             y: 349
             source: "./img/seatbelt.png"
             visible: root.seatbelt
         }
         Image {
-            x: 424
+            id: door_ajar_lamp
+            x: 433
             y: 349
             source: "./img/doorajar.png"
             visible: root.doorswitch
         }
-        Image {
-            x: 464
-            y: 401
-            source: "./img/fuel_icon_white.png"
+        Item {
+            x: 469
+            y: 407
+
+            Image {
+                id: fuel_icon
+                width: 17
+                height: 19
+                source: "./img/fuel_icon_white.png"
+            }
+            //            ColorOverlay {
+            //                anchors.fill: fuel_icon
+            //                source: fuel_icon
+            //                color: root.primary_color
+            //            }
         }
     }
-} //End Init Item//} //End Window
+} //End Init Item
+
+/*##^##
+Designer {
+    D{i:0}D{i:53;locked:true}
+}
+##^##*/

@@ -61,7 +61,7 @@ Item {
     property bool left_joystick: inputs & 0x20000000 || root.udp_left
     property bool right_joystick: inputs & 0x40000000 || root.udp_right
 
-    property int odometer: rpmtest.odometer0data*0.62
+    property int odometer: rpmtest.odometer0data/10*0.62 //Need to div by 10 to get 6 digits with leading 0
     property int tripmeter: rpmtest.tripmileage0data*0.62
     property real value: 0
     property real shiftvalue: 0
@@ -359,7 +359,7 @@ Item {
 
     Text {
         id: odometer_display_val
-        text: root.odometer + " mi"
+        text: padLeft(root.odometer,6,0) + " mi"
         font.pixelSize: 24
         horizontalAlignment: Text.AlignRight
         font.pointSize: 16

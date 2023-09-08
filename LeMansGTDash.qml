@@ -946,7 +946,7 @@ Item {
             width: 96
             height: 32
             source: "./img/e-brake.png"
-            visible: root.handbrake
+            visible: root.brake|root.handbrake //This is the way it is set in main.qml so trying this to see if it shows.
         }
         Image {
             id: tcs_image

@@ -2,10 +2,10 @@
 import QtQuick 2.3
 
 //import Qt3D 1.0
-//import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.0
 
 //import QtGraphicalEffects 1.12
-//import FileIO 1.0
+import FileIO 1.0
 Item {
 
 
@@ -61,44 +61,44 @@ Item {
     property bool left_joystick: inputs & 0x20000000 || root.udp_left
     property bool right_joystick: inputs & 0x40000000 || root.udp_right
 
-    property int odometer: 0
-    property int tripmeter: 0
+    property int odometer: rpmtest.odometer0data*0.62
+    property int tripmeter: rpmtest.tripmileage0data*0.62
     property real value: 0
     property real shiftvalue: 0
 
-    property real rpm: 3000
+    property real rpm: rpmtest.rpmdata
     property real rpmlimit: 8000 //Originally was 7k, switched to 8000 -t
     property real rpmdamping: 5
     //property real rpmscaling:0
-    property real speed: 0
+    property real speed: rpmtest.speeddata
     property int speedunits: 2
 
-    property real watertemp: 85
+    property real watertemp: rpmtest.watertempdata
     property real waterhigh: 0
     property real waterlow: 80
     property real waterunits: 1
 
-    property real fuel: 50
+    property real fuel: rpmtest.fueldata
     property real fuelhigh: 0
     property real fuellow: 0
     property real fuelunits
     property real fueldamping
 
-    property real o2: 0
-    property real map: 0
-    property real maf: 0
+    property real o2: rpmtest.o2data
+    property real map: rpmtest.mapdata
+    property real maf: rpmtest.mafdata
 
-    property real oilpressure: 5
+    property real oilpressure: rpmtest.oilpressuredata
     property real oilpressurehigh: 0
     property real oilpressurelow: 0
     property real oilpressureunits: 0
 
-    property real oiltemp: 100
+    property real oiltemp: rpmtest.oiltempdata
     property real oiltemphigh: 90
     property real oiltemplow: 90
     property real oiltempunits: 1
 
-    property real batteryvoltage: 0
+    property real batteryvoltage: rpmtest.batteryvoltagedata
 
     property int mph: (speed * 0.62)
 

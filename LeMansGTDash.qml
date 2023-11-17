@@ -188,11 +188,6 @@ Item {
         source: "./HelveticaBlackOB.ttf"
     }
 
-    //Color Change Setup for warming up.
-    property string engine_warming_dynamics: if (root.watertemp < root.waterlow)
-                                                 root.engine_warmup_color
-                                             else
-                                                 root.primary_color
 
     /* ########################################################################## */
     /* Main Layout items */
@@ -248,25 +243,26 @@ Item {
         y: 203
         z: 2
         width: 174
+        opacity: 100
         color: if (root.rpm < 8000)
                    root.primary_color
                else
                    root.warning_red
-
-        //Not working? Help?
-
-
-        /*Behavior on color {
-                SequentialAnimation {
-                    ColorAnimation {
-                        loops: Animation.Infinite
-                        running: true
-                        from: root.warning_red
-                        to: "black"
-                        duration: 10
-                    }
-                }
-            }*/
+        Timer{
+            id: rpm_shift_blink
+            running: if(root.rpm >= 8000)
+                        true
+                    else
+                        false
+            interval: 60
+            repeat: true
+            onTriggered: if(parent.opacity === 0){
+                parent.opacity = 100
+            }
+            else{
+                parent.opacity = 0
+            } 
+        }
     }
 
     Text {
@@ -281,7 +277,9 @@ Item {
         x: 36
         y: 396
         z: 2
-        color: if (root.watertemp < 95)
+        color: if (root.watertemp < root.waterlow)
+                    root.engine_warmup_color
+                else if (root.watertemp > root.waterlow && root.watertemp < root.waterhigh)
                    root.primary_color
                else
                    root.warning_red
@@ -297,7 +295,7 @@ Item {
         x: 36
         y: 338
         z: 2
-        color: if (root.oiltemp < 110)
+        color: if (root.oiltemp < root.oiltemphigh)
                    root.primary_color
                else
                    root.warning_red
@@ -336,7 +334,13 @@ Item {
         y: 358
         width: 148
         color: root.primary_color
-        text: root.mph.toFixed(0) //"0"   // Alec added speed
+        text: if (root.speedunits === 0){
+                    root.speed.toFixed(0) //"0"   // Alec added speed
+                }
+                else{
+                    root.mph.toFixed(0)
+                }
+
         z: 2
     }
 
@@ -359,7 +363,12 @@ Item {
 
     Text {
         id: odometer_display_val
-        text: padLeft(root.odometer,6,0) + " mi"
+        text: if (root.speedunits === 0)
+                root.odometer/.62 + " km"
+                else if(root.speedunits === 1)
+                root.odometer + " mi"
+                else
+                root.odometer
         font.pixelSize: 24
         horizontalAlignment: Text.AlignRight
         font.pointSize: 16
@@ -376,7 +385,12 @@ Item {
         x: 707
         y: 396
         color: root.primary_color
-        text: "mi/h"
+        text: if (root.speedunits === 0)
+                "km/h"
+                else if(root.speedunits === 1)
+                "mi/h"
+                else
+                ""
         font.pixelSize: 32
         horizontalAlignment: Text.AlignRight
         z: 2
@@ -476,7 +490,10 @@ Item {
                 x: 73.8
                 width: 6
                 height: 18
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -486,7 +503,10 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -496,7 +516,10 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -506,7 +529,10 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -516,7 +542,10 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -582,32 +611,6 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: 0
             }
-
-            //            Repeater {
-            //                model: 11
-            //                property int index
-            //                Row {
-            //                    id: indie_tickrow
-            //                    width: 68
-            //                    Rectangle {
-            //                        width: 6
-            //                        height: 18
-            //                        x: 0
-            //                        y: -2
-            //                        color: if (root.watertemp < 80) {
-            //                                   if (index <= 4)
-            //                                       root.engine_warmup_color
-            //                                   else
-            //                                       root.primary_color
-            //                               } else
-            //                                   root.primary_color
-            //                        //                            color: if (index < 8)
-            //                        //                                       root.primary_color
-            //                        //                                   else
-            //                        //                                       root.warning_red
-            //                    }
-            //                }
-            //            }
         }
                 Row {
                     id: subTicks
@@ -667,7 +670,10 @@ Item {
             Text {
                 id: rev_zero
                 x: 0
-                color: root.engine_warming_dynamics
+               color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 text: "0"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -675,7 +681,10 @@ Item {
             }
             Text {
                 id: rev_one
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 text: "1"
                 anchors.left: parent.left
                 font.pixelSize: 16
@@ -685,7 +694,10 @@ Item {
             }
             Text {
                 id: rev_two
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 text: "2"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -695,7 +707,10 @@ Item {
             }
             Text {
                 id: rev_three
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 text: "3"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -705,7 +720,10 @@ Item {
             }
             Text {
                 id: rev_four
-                color: root.engine_warming_dynamics
+                color: if (root.watertemp < 80) 
+                    root.engine_warmup_color
+                else
+                    root.primary_color
                 text: "4"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -782,10 +800,12 @@ Item {
             id: watertemp_label
             x: 113
             y: 410
-            color: if (root.watertemp < 95)
-                       root.primary_color
-                   else
-                       root.warning_red
+            color: if (root.watertemp < root.waterlow)
+                    root.engine_warmup_color
+                else if (root.watertemp > root.waterlow && root.watertemp < root.waterhigh)
+                   root.primary_color
+               else
+                   root.warning_red
             text: "Water Temp °C"
             font.pixelSize: 16
             horizontalAlignment: Text.AlignHCenter
@@ -796,8 +816,7 @@ Item {
             id: oiltemp_label
             x: 113
             y: 353
-            color: if (root.watertemp < 110)
-                       //110 is a good oil temp limit IMO
+            color: if (root.oiltemp < root.oiltemphigh)
                        root.primary_color
                    else
                        root.warning_red
@@ -823,11 +842,11 @@ Item {
             x: 321
             y: 431
             width: 128
-            color: if (root.fuel > 30)
+            color: if (root.fuel > root.fuellow)
                        root.primary_color
                    else
                        root.warning_red
-            text: if (root.fuel > 30)
+            text: if (root.fuel > root.fuellow)
                       root.fuel + " %"
                   else
                       "LOW FUEL!!"
@@ -859,7 +878,7 @@ Item {
                     Rectangle {
                         width: 11
                         height: 32
-                        color: if (Math.ceil(root.fuel / 10) > index) {
+                        color: if (Math.floor(root.fuel / 10) > index) {
                                    if (root.fuel > 30)
                                        root.primary_color
                                    else
@@ -999,12 +1018,8 @@ Item {
                 width: 17
                 height: 19
                 source: "./img/fuel_icon_white.png"
+
             }
-            //            ColorOverlay {
-            //                anchors.fill: fuel_icon
-            //                source: fuel_icon
-            //                color: root.primary_color
-            //            }
         }
     }
 } //End Init Item

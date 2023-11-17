@@ -8,6 +8,15 @@ Inspired by more "race" dashes in LeMans GT cars.
 
 ###
 
+TO DO:
+
+- Full Screen takeover so we can use the qml warning icons instead of the new ones.
+- Something Lotus related logo-y?
+- Better animation in onLoad
+- Something a little more monospaced for the numbers
+- Better icons?
+- Trip Odometer? (Do people use this on the Lotus?)
+
 ## Dev Notes:
 
 When working with QML files for GAWR dash, try to make sure you're still running 5.15, as 6.0+ has gotten rid of the QTGraphicalEffects with no backwards import compatibility (Thanks guys!). If you want to do things like color overlays or glows, you will need this.
@@ -23,3 +32,5 @@ I'm trying to keep a general 16px padding around the screen, as on my Lotus Dash
 Try to use variable names instead of per item colors
 
 Try to keep fonts uniform and clear. Don't go below 12px for font heights, as it gets illegible.
+
+Utilize opacity filters for timers to get blink effects.

@@ -174,7 +174,8 @@ Item {
 
     //Tristan Generated Code Here:
     property string white_color: "#FFFFFF"
-    property string primary_color: "#FFFFFF" //#FFBF00 for amber
+    property string primary_color: "#FFFFFF"; //#FFBF00 for amber
+    property string night_light_color: "#9c7200"
     property string sweetspot_color: "#FFA500" //Cam Changeover Rev colpr
     property string warning_red: "#FF0000" //Redline/Warning colors
     property string engine_warmup_color: "#eb7500"
@@ -229,7 +230,7 @@ Item {
         z: 2
         width: 800
         height: 2
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
     }
 
     Text {
@@ -245,7 +246,7 @@ Item {
         width: 174
         opacity: 100
         color: if (root.rpm < 8000)
-                   root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                else
                    root.warning_red
         Timer{
@@ -280,7 +281,7 @@ Item {
         color: if (root.watertemp < root.waterlow)
                     root.engine_warmup_color
                 else if (root.watertemp > root.waterlow && root.watertemp < root.waterhigh)
-                   root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                else
                    root.warning_red
     }
@@ -296,10 +297,11 @@ Item {
         y: 338
         z: 2
         color: if (root.oiltemp < root.oiltemphigh)
-                   root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                else
                    root.warning_red
         text: root.oiltemp.toFixed(0) + "°" // "100°"
+        visible: if(root.oiltemphigh === 0)false; else true
     }
 
     Text {
@@ -313,7 +315,8 @@ Item {
         x: 36
         y: 284
         z: 2
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
+        visible: if(root.oilpressurehigh === 0)false; else true
     }
     Rectangle {
         id: oilpressure_line
@@ -321,7 +324,9 @@ Item {
         y: 327
         width: 256
         height: 2
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
+        visible: if(root.oilpressurehigh === 0)false; else true
+
     }
 
     Text {
@@ -333,7 +338,7 @@ Item {
         x: 553
         y: 358
         width: 148
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
         text: if (root.speedunits === 0){
                     root.speed.toFixed(0) //"0"   // Alec added speed
                 }
@@ -350,7 +355,9 @@ Item {
         y: 385
         width: 256
         height: 2
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
+        visible: if(root.oiltemphigh === 0)false; else true
+
     }
     Rectangle {
         id: oiltemp_line_vert
@@ -358,7 +365,7 @@ Item {
         y: 280
         height: 159
         width: 2
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
     }
 
     Text {
@@ -377,14 +384,14 @@ Item {
         y: 440 //480 - 16 - 12
         z: 2
         width: 164
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
     }
 
     Text {
         id: speed_label
         x: 707
         y: 396
-        color: root.primary_color
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
         text: if (root.speedunits === 0)
                 "km/h"
                 else if(root.speedunits === 1)
@@ -430,7 +437,7 @@ Item {
 
                     //Settings for how our RPM colors are set
                     color: if (index < 59)
-                               root.primary_color
+                            if(!root.sidelight) root.primary_color; else root.night_light_color
                     //Cam Changeover
                            else if (index >= 59 && index < 79)
                                root.sweetspot_color
@@ -465,7 +472,7 @@ Item {
             x: 0
             y: 160
             z: 1
-            color: root.primary_color
+            color: if(!root.sidelight) root.primary_color; else root.night_light_color
         }
         Rectangle {
             id: tickmark_redline
@@ -493,7 +500,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -506,7 +513,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -519,7 +526,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -532,7 +539,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -545,7 +552,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -555,7 +562,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -565,7 +572,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -575,7 +582,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -585,7 +592,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -595,7 +602,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.left: parent.left
@@ -605,7 +612,7 @@ Item {
                 y: 0
                 width: 6
                 height: 18
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 border.color: root.background_color
                 border.width: 2
                 anchors.right: parent.right
@@ -638,11 +645,12 @@ Item {
                                            if (index <= 3)
                                                root.engine_warmup_color
                                            else
-                                               root.primary_color
+                                            if(!root.sidelight) root.primary_color; else root.night_light_color
+
                                        } else
-                                           root.primary_color
-                                //                                   else
-                                //                                       root.warning_red
+                                            if(!root.sidelight) root.primary_color; else root.night_light_color
+
+    
 
                             }
                         }
@@ -673,7 +681,7 @@ Item {
                color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "0"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -684,7 +692,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "1"
                 anchors.left: parent.left
                 font.pixelSize: 16
@@ -697,7 +705,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "2"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -710,7 +718,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "3"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -723,7 +731,7 @@ Item {
                 color: if (root.watertemp < 80) 
                     root.engine_warmup_color
                 else
-                    root.primary_color
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "4"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -733,7 +741,7 @@ Item {
             }
             Text {
                 id: rev_five
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "5"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -743,7 +751,7 @@ Item {
             }
             Text {
                 id: rev_six
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "6"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -753,7 +761,7 @@ Item {
             }
             Text {
                 id: rev_seven
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "7"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -763,7 +771,7 @@ Item {
             }
             Text {
                 id: numba_eight
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "8"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -773,7 +781,7 @@ Item {
             }
             Text {
                 id: rev_9
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "9"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -785,7 +793,7 @@ Item {
                 id: rev_10
                 x: 0
                 y: 0
-                color: root.primary_color
+                color: if(!root.sidelight) root.primary_color; else root.night_light_color
                 text: "10"
                 anchors.right: parent.right
                 font.pixelSize: 16
@@ -803,7 +811,7 @@ Item {
             color: if (root.watertemp < root.waterlow)
                     root.engine_warmup_color
                 else if (root.watertemp > root.waterlow && root.watertemp < root.waterhigh)
-                   root.primary_color
+                   if(!root.sidelight) root.primary_color; else root.night_light_color
                else
                    root.warning_red
             text: "Water Temp °C"
@@ -817,24 +825,28 @@ Item {
             x: 113
             y: 353
             color: if (root.oiltemp < root.oiltemphigh)
-                       root.primary_color
+                       if(!root.sidelight) root.primary_color; else root.night_light_color
                    else
                        root.warning_red
             text: "Oil Temp °C"
             font.pixelSize: 16
             horizontalAlignment: Text.AlignHCenter
             font.family: helvetica_black_oblique.name
+            visible: if(root.oiltemphigh === 0)false; else true
+
         }
 
         Text {
             id: oilpressure_label
             x: 113
             y: 298
-            color: root.primary_color
+            color: if(!root.sidelight) root.primary_color; else root.night_light_color
             text: "Oil Pressure"
             font.pixelSize: 16
             horizontalAlignment: Text.AlignHCenter
             font.family: helvetica_black_oblique.name
+            visible: if(root.oilpressurehigh === 0)false; else true
+
         }
 
         Text {
@@ -843,7 +855,7 @@ Item {
             y: 431
             width: 128
             color: if (root.fuel > root.fuellow)
-                       root.primary_color
+                       if(!root.sidelight) root.primary_color; else root.night_light_color
                    else
                        root.warning_red
             text: if (root.fuel > root.fuellow)
@@ -880,7 +892,7 @@ Item {
                         height: 32
                         color: if (Math.floor(root.fuel / 10) > index) {
                                    if (root.fuel > 30)
-                                       root.primary_color
+                                       if(!root.sidelight) root.primary_color; else root.night_light_color
                                    else
                                        root.warning_red
                                } else
@@ -890,7 +902,7 @@ Item {
                                           0
                                       } else
                                           1
-                        border.color: root.primary_color
+                        border.color: if(!root.sidelight) root.primary_color; else root.night_light_color
                         z: 1
                     }
                     Rectangle {
@@ -1018,8 +1030,15 @@ Item {
                 width: 17
                 height: 19
                 source: "./img/fuel_icon_white.png"
-
             }
+            ColorOverlay{
+                    color: root.night_light_color
+                    source: fuel_icon
+                    enabled: root.sidelight
+                    anchors.fill: fuel_icon
+                    opacity: 1
+                    visible: root.sidelight
+                }
         }
     }
 } //End Init Item

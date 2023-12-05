@@ -315,7 +315,10 @@ Item {
         x: 36
         y: 284
         z: 2
-        color: if(!root.sidelight) root.primary_color; else root.night_light_color
+        color: if (root.oilpressure < root.oilpressurelow)
+                    root.warning_red
+                else
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
         visible: if(root.oilpressurehigh === 0)false; else true
     }
     Rectangle {
@@ -840,7 +843,10 @@ Item {
             id: oilpressure_label
             x: 113
             y: 298
-            color: if(!root.sidelight) root.primary_color; else root.night_light_color
+            color: color: if (root.oilpressure < root.oilpressurelow)
+                    root.warning_red
+                else
+                    if(!root.sidelight) root.primary_color; else root.night_light_color
             text: "Oil Pressure"
             font.pixelSize: 16
             horizontalAlignment: Text.AlignHCenter

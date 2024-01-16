@@ -35,4 +35,4 @@ Try to keep fonts uniform and clear. Don't go below 12px for font heights, as it
 
 Utilize opacity filters for timers to get blink effects.
 
-Blink effects should only be used on actual warning items! They are extremely distracting on the track!
+Blink effects should only be used on actual warning items, as they are extremely distracting on the track!

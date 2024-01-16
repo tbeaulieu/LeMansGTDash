@@ -843,7 +843,7 @@ Item {
             id: oilpressure_label
             x: 113
             y: 298
-            color: color: if (root.oilpressure < root.oilpressurelow)
+            color: if (root.oilpressure < root.oilpressurelow)
                     root.warning_red
                 else
                     if(!root.sidelight) root.primary_color; else root.night_light_color

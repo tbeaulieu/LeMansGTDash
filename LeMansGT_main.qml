@@ -341,7 +341,7 @@ Item{
 
 FileIO {
     id: config_file
-    source: "/opt/Garw_IC7/screen_configs/lemansgt_config.txt"
+    source: "/opt/Garw_IC7/screen_configs/LeMansGT_config.txt"
     onError: console.log(msg)
        }
 
@@ -793,7 +793,7 @@ FileIO {
 
 
 
-LeMansGT   {
+LeMansGT  {
         id: dial
         odometer:parent.odometer/10
         tripmeter:parent.tripmeter

@@ -425,7 +425,7 @@ Item {
             z: 2
         }
 
-        Row {
+        Item {
             id: mainTicks
             x: 0
             y: 158
@@ -610,7 +610,7 @@ Item {
 
         //RPM Numbers
         //Changed to Manual position as the alignment wasn't nice enough for my preferences
-        Row {
+        Item {
             id: numbers
             x: 0
             y: 180

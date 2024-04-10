@@ -292,7 +292,7 @@ Item {
     Text {
         id: odometer_display_val
         text: if (root.speedunits === 0)
-                root.odometer/.62 + " km"
+                (root.odometer/.62).toFixed(0) + " km"
                 else if(root.speedunits === 1)
                 root.odometer + " mi"
                 else

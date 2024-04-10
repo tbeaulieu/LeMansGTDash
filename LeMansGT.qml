@@ -3,18 +3,12 @@ import QtGraphicalEffects 1.0
 import "img"
 
 Item {
-Item {
-    /*#########################################################################
-      #############################################################################
-      Imported Values From GAWR inits
-      #############################################################################
-      #############################################################################
-     */
     id: root
     ////////// IC7 LCD RESOLUTION ////////////////////////////////////////////
     width: 800
     height: 480
-    
+    x: 0
+    y: 0
     z: 0
     
     property int myyposition: 0
@@ -110,7 +104,7 @@ Item {
     property real rpm_needle_damping: 0.2 //if(rpm<1000).15; else 0.2
 
     property bool changing_page: rpmtest.changing_pagedata
-    //Tristan Generated Code Here:
+
     property string white_color: "#FFFFFF"
     property string primary_color: "#FFFFFF"; //#FFBF00 for amber
     property string night_light_color: "#9c7200"
@@ -118,10 +112,11 @@ Item {
     property string warning_red: "#FF0000" //Redline/Warning colors
     property string engine_warmup_color: "#eb7500"
     property string background_color: "#000000"
-    x: 0
-    y: 0
+  
 
-    //Fonts
+    /* ########################################################################## */
+    /* Fonts */
+    /* ########################################################################## */
     FontLoader {
         id: helvetica_black_oblique
         source: "./HelveticaBlackOB.ttf"
@@ -150,29 +145,37 @@ Item {
         height: 2
         color: if(!root.sidelight) root.primary_color; else root.night_light_color
     }
-
+    //Added static items for better visibility rules
     Text {
         id: rpm_display_val
         text: root.rpm + " rpm"
         font.pixelSize: 32
         horizontalAlignment: Text.AlignRight
-        font.pointSize: 32
         font.family: helvetica_black_oblique.name
         x: 608
         y: 203
         z: 2
         width: 174
         opacity: 100
-        color: if (root.rpm < 8000)
-                   if(!root.sidelight) root.primary_color; else root.night_light_color
-               else
-                   root.warning_red
+        visible: root.rpm < root.rpmlimit
+        color: if(!root.sidelight) root.primary_color; else root.night_light_color
+    }
+    Text {
+        id: rpm_display_val_blinking
+        text: root.rpm + " rpm"
+        font.pixelSize: 32
+        horizontalAlignment: Text.AlignRight
+        font.family: helvetica_black_oblique.name
+        x: 608
+        y: 203
+        z: 2
+        width: 174
+        opacity: 100
+        visible: root.rpm >= root.rpmlimit
+        color: root.warning_red
         Timer{
             id: rpm_shift_blink
-            running: if(root.rpm >= 8000)
-                        true
-                    else
-                        false
+            running: true
             interval: 60
             repeat: true
             onTriggered: if(parent.opacity === 0){
@@ -326,6 +329,30 @@ Item {
         font.pointSize: 32
     }
 
+    //Masking with opacity for better performance
+    Rectangle{
+            id: opacity_increase
+            height: 128
+            width: Math.floor(root.rpm / 100) * 7.68 - 7.68
+            x:16
+            y: 16
+            color: 'black'
+            z:4
+            opacity: .35
+        }
+    
+    Rectangle{
+            id: opacity_decrease
+            height: 128
+            width: 768
+            x: Math.floor(root.rpm / 100) * 7.68 + 15.32
+            y: 16
+            color: 'black'
+            z:3
+            opacity: .85
+        }
+
+        
     // RPM Marks
     Row {
         id: rpmLights
@@ -338,6 +365,7 @@ Item {
         smooth: false
         clip: false
         z: 2
+        
         Repeater {
             property int index
             z: 2
@@ -345,15 +373,7 @@ Item {
             Row {
                 Rectangle {
                     height: 128
-
-                    //Control for how the bar is lit
-                    opacity: if (Math.floor(root.rpm / 100) > index + 1)
-                                 .7
-                             else if (Math.floor(root.rpm / 100) === index + 1)
-                                 1
-                             else
-                                 .15
-
+                    opacity: 1
                     width: 3.68
 
                     //Settings for how our RPM colors are set
@@ -880,7 +900,6 @@ Item {
             width: 47
             height: 32
             source: "./img/battery.png"
-            //autoTransform: false
             visible: root.battery
         }
         Image {
@@ -967,8 +986,3 @@ Item {
     }
 } //End LeMansGT
 
-/*##^##
-Designer {
-    D{i:0}D{i:53;locked:true}
-}
-##^##*/

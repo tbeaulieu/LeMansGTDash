@@ -192,7 +192,6 @@ Item {
         text: root.watertemp.toFixed(
                   0) + "°" // Alec added toFixed(0) to have no decimal places
         font.pixelSize: 32
-        font.pointSize: 32
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
@@ -210,7 +209,6 @@ Item {
     Text {
         id: oiltemp_display_val
         font.pixelSize: 32
-        font.pointSize: 32
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
@@ -229,7 +227,6 @@ Item {
         id: oilpressure_display_val
         text: root.oilpressure.toFixed(0) //Alec added toFixed(0)
         font.pixelSize: 32
-        font.pointSize: 32
         font.family: helvetica_black_oblique.name
         width: 128
         height: 32
@@ -258,7 +255,6 @@ Item {
         font.pixelSize: 72
         horizontalAlignment: Text.AlignRight
         font.family: helvetica_black_oblique.name
-        font.pointSize: 72
         x: 553
         y: 358
         width: 148
@@ -302,7 +298,6 @@ Item {
                 root.odometer
         font.pixelSize: 24
         horizontalAlignment: Text.AlignRight
-        font.pointSize: 16
         font.family: helvetica_black_oblique.name
         x: 618
         y: 440 //480 - 16 - 12
@@ -326,7 +321,6 @@ Item {
         horizontalAlignment: Text.AlignRight
         z: 2
         font.family: helvetica_black_oblique.name
-        font.pointSize: 32
     }
 
     //Masking with opacity for better performance

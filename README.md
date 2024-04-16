@@ -4,7 +4,7 @@ Dashboard View for Lotus Elise GARW dash
 
 ###
 
-Inspired by more "race" dashes in LeMans GT cars.
+Inspired by more "race" dashes in LeMans GT cars. This is an early dash that I developed, more of a proof of concept than an exceptional design.
 
 ###
 

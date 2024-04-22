@@ -40,7 +40,7 @@ Blink effects should only be used on actual warning items, as they are extremely
 # Installation notes:
 
 1) Obtain the GARW dash installer here: https://github.com/dustinsterk/GARWDashUploader
-2) You will need to unzip this dashboard file, rename the folder to "LeMansGT" (Don't use the quotes), and recompress it. (I know, it's a pain)
+2) You will need to unzip this dashboard file, rename the folder to "LeMansGT_Main" (Don't use the quotes), and recompress it. (I know, it's a pain)
 3) Upload the dash via the uploader while connected to the GAWR Wifi.
 4) Follow the rest of the aforementioned instructions.
 

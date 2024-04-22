@@ -293,9 +293,9 @@ Item {
         text: if (root.speedunits === 0)
                 (root.odometer/.62).toFixed(0) + " km"
                 else if(root.speedunits === 1)
-                root.odometer + " mi"
+                root.odometer.toFixed(0) + " mi"
                 else
-                root.odometer
+                root.odometer.toFixed(0)
         font.pixelSize: 24
         horizontalAlignment: Text.AlignRight
         font.family: helvetica_black_oblique.name

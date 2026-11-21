@@ -233,7 +233,7 @@ Item {
 
     Text {
         id: oilpressure_display_val
-        text: root.oilpressureunits === 1 ? root.oilpressure.toFixed(0) : (root.oilpressure * 14.5038).toFixed(0)   // sender value is bar
+        text: root.oilpressureunits === 1 ? root.oilpressure.toFixed(1) : (root.oilpressure * 14.5038).toFixed(0)   // sender value is bar; one decimal in BAR
         font.pixelSize: 32
         font.family: helvetica_black_oblique.name
         width: 128

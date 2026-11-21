@@ -49,7 +49,7 @@ Item {
             { key: "blue",           label: "Blue",        type: "number", min: 0, max: 255, step: 1, wrap: true } ] },
 
         { name: "Drive", rows: [
-            { key: "speedunits",     label: "Speed units", type: "enum",   options: ["KMH", "MPH", "BOTH"] },
+            { key: "speedunits",     label: "Speed units", type: "enum",   options: ["KMH", "MPH"] },
             { key: "rpmlimit",       label: "Rpm limit",   type: "number", min: 0, max: 9000, step: 100, wrap: true } ] },
 
         // Temperature limits are always Celsius, 0 = no warning. Low is the warm-up threshold.
@@ -267,8 +267,6 @@ Item {
                     menu.height - th.footH - 8 - height)
         Behavior on y { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
 
-        // opacity: !menu.open ? 0 : (menu.level === 1 ? 1.0 : 0.2)
-        Behavior on opacity { NumberAnimation { duration: 160 } }
         Rectangle {                                 // solid backing: nothing shows through
             x: -6; y: -6
             width: fly.width + 12

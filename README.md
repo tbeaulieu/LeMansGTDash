@@ -37,11 +37,23 @@ Utilize opacity filters for timers to get blink effects.
 
 Blink effects should only be used on actual warning items, as they are extremely distracting on the track!
 
+## Settings
+
+Oil temperature and oil pressure are optional: turn each one on with its Show row in the settings menu. Temperatures can be shown in C or F and oil pressure in PSI or BAR. Limits are always set in Celsius / bar, and a High of 0 turns that warning off. Coolant Low is the warm-up threshold.
+
+## Layout
+
+- `LeMansGT.qml` - entry file: live data, config load/save, joystick handling, settings menu
+- `LeMansGTDisplay.qml` - the dial itself
+- `SettingsMenu.qml`, `SettingBox.qml`, `MonoText.qml`, `Theme.qml`, `GridBackground.qml` - settings menu (shared with AgeSolo)
+- `SettingsPreview.qml` - standalone menu preview, not loaded by the dash
+- `LeMansGT.qml.png` - preview shown in the dash picker
+- `fonts/`, `img/` - assets
+
+Settings are saved as JSON in `/opt/IC7/screen_configs/LeMansGT_config.json`. An existing `LeMansGT_config.txt` is imported once on first run.
+
 # Installation notes:
 
-1) Obtain the GARW dash installer here: https://github.com/dustinsterk/GARWDashUploader
-2) You will need to unzip this dashboard file, rename the folder to "LeMansGT_Main" (Don't use the quotes), and recompress it. (I know, it's a pain)
-3) Upload the dash via the uploader while connected to the GAWR Wifi.
-4) Follow the rest of the aforementioned instructions.
+1) Install it with GARW Genie: https://github.com/dustinsterk/GARWGenie
 
 There are some prebuilt releases for the uploader, check with the Discord Channel here: https://discord.gg/bmKFrt8XP6

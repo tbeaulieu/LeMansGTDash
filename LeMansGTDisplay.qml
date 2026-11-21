@@ -56,7 +56,7 @@ Item {
     property bool right_joystick: inputs & 0x40000000 || root.udp_right
 
     property int odometer: rpmtest.odometer0data/10 //Overridden by LeMansGT.qml: km or miles to match speedunits, div by 10 to get 6 digits
-    property int tripmeter: rpmtest.tripmileage0data*0.62
+    property int tripmeter: rpmtest.tripmileage0data*0.621371
     property real value: 0
     property real shiftvalue: 0
 
@@ -93,7 +93,7 @@ Item {
 
     property real batteryvoltage: rpmtest.batteryvoltagedata
 
-    property int mph: (speed * 0.62)
+    property int mph: Math.round(speed * 0.621371)
 
     property int gearpos: rpmtest.geardata
 
@@ -165,7 +165,7 @@ Item {
     //Added static items for better visibility rules
     Text {
         id: rpm_display_val
-        text: root.rpm + " rpm"
+        text: root.rpm.toFixed(0) + " rpm"
         font.pixelSize: 32
         horizontalAlignment: Text.AlignRight
         font.family: helvetica_black_oblique.name
@@ -179,7 +179,7 @@ Item {
     }
     Text {
         id: rpm_display_val_blinking
-        text: root.rpm + " rpm"
+        text: root.rpm.toFixed(0) + " rpm"
         font.pixelSize: 32
         horizontalAlignment: Text.AlignRight
         font.family: helvetica_black_oblique.name
@@ -798,7 +798,7 @@ Item {
                    else
                        root.warning_red
             text: if (root.fuel > root.fuellow)
-                      root.fuel + " %"
+                      root.fuel.toFixed(0) + " %"
                   else
                       "LOW FUEL!!"
             font.pixelSize: 16
@@ -958,6 +958,13 @@ Item {
             y: 349
             source: "./img/doorajar.png"
             visible: root.doorswitch
+        }
+        Image {
+            id: airbag_lamp
+            x: 476
+            y: 352
+            source: "./img/airbag.png"
+            visible: root.airbag
         }
         Item {
             x: 469

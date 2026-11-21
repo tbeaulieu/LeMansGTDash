@@ -52,7 +52,7 @@ Item {
             { key: "speedunits",     label: "Speed units", type: "enum",   options: ["KMH", "MPH"] },
             { key: "rpmlimit",       label: "Rpm limit",   type: "number", min: 0, max: 9000, step: 100, wrap: true } ] },
 
-        // Temperature limits are always Celsius, 0 = no warning. Low is the warm-up threshold.
+        // Temperature limits are in the units chosen for that readout (changing Units converts them), 0 = no warning. Low is the warm-up threshold.
         { name: "Coolant", rows: [
             { key: "waterunits",     label: "Units", type: "enum",   options: ["F", "C"] },
             { key: "waterhigh",      label: "High",  type: "number", min: 0, step: 1 },
